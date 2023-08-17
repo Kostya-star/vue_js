@@ -3,14 +3,16 @@
         <div class="header">
             <my-button @click="isShowModal = true">Create post</my-button>
             <div>
-                Select by: <my-select :options="selectOptions" v-model="selectedOption" />
+                <my-input v-model="searchValue" name="search" placeholder="Search by title" />
+                Sort by: <my-select :options="selectOptions" v-model="selectedOption" />
             </div>
         </div>
         <my-modal v-model:isShow="isShowModal">
             <post-form @createPost='onCreatePost' />
         </my-modal>
-        <post-list :posts="sortedPosts" @deletePost="deletePost" v-if="!isPostsLoading" />
+        <post-list :posts="sortedAndSearchedPosts" @deletePost="deletePost" v-if="!isPostsLoading" />
         <h1 v-else>Fetching for posts...</h1>
+        <my-pagination :pagesCount="pagesCount" v-model:currentPage="currentPage" />
     </div>
 </template>
 <script>
@@ -27,6 +29,10 @@ export default {
             isShowModal: false,
             isPostsLoading: true,
             selectedOption: '',
+            searchValue: '',
+            pageSize: 10,
+            pagesCount: 0,
+            currentPage: 1,
             selectOptions: [
                 {
                     value: 'title',
@@ -36,7 +42,7 @@ export default {
                     value: 'body',
                     label: 'Description'
                 }
-            ]
+            ],
         }
     },
     methods: {
@@ -49,8 +55,14 @@ export default {
         },
         async fetchPosts() {
             try {
-                const { data } = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
-                this.posts = data
+                const resp = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+                    params: {
+                        _limit: this.pageSize,
+                        _page: this.currentPage
+                    }
+                })
+                this.posts = resp.data
+                this.pagesCount = Math.ceil(resp.headers['x-total-count'] / this.pageSize)
             } catch (error) {
                 console.log('error when fetching posts', error);
             } finally {
@@ -68,8 +80,16 @@ export default {
                 const b = post2[this.selectedOption]?.toLowerCase()
                 return a?.localeCompare(b)
             })
+        },
+        sortedAndSearchedPosts() {
+            return this.sortedPosts.filter(post => post.title.toLowerCase().includes(this.searchValue.toLowerCase()))
         }
     },
+    watch: {
+        currentPage() {
+            this.fetchPosts()
+        }
+    }
 }
 </script>
 <style>
@@ -81,6 +101,7 @@ export default {
 
 .wrapper {
     padding: 0px 10px;
+    padding-bottom: 60px;
 }
 
 .header {

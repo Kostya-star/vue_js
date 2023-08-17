@@ -1,6 +1,8 @@
 <template>
   <div class="posts" v-if="posts.length > 0">
-    <post-item v-for="post of posts" :post="post" :key="post.id" @deletePost="this.$emit('deletePost', post.id)" />
+    <TransitionGroup name="post-item">
+      <post-item v-for="post of posts" :post="post" :key="post.id" @deletePost="this.$emit('deletePost', post.id)" />
+    </TransitionGroup>
   </div>
   <div class="posts_empty" v-else>
     No posts yet 😒
@@ -34,5 +36,20 @@ export default {
   font-weight: 700;
   font-size: 25px;
   text-align: center;
+}
+
+.post-item-enter-active,
+.post-item-leave-active {
+  transition: all .3s ease;
+}
+
+.post-item-enter-from,
+.post-item-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.post-item-move {
+  transition: transform .4s ease;
 }
 </style>

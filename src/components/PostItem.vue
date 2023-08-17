@@ -1,8 +1,11 @@
 <template>
     <div class="post">
         <div>
-            <h3>{{ post.title }}</h3>
-            <p>{{ post.body }}</p>
+            <div>{{ post.id }}</div>
+            <div>
+                <h3>{{ post.title }}</h3>
+                <p>{{ post.body }}</p>
+            </div>
         </div>
         <my-button @click="this.$emit('deletePost', post.id)">Delete</my-button>
     </div>

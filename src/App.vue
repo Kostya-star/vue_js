@@ -1,6 +1,11 @@
 <template>
-    <post-form @createPost='onCreatePost'/>
-    <post-list :posts="posts" @deletePost="deletePost"/>
+    <div class="create-post">
+        <my-button @click="isShowModal = true">Create post</my-button>
+    </div>
+    <my-modal v-model:isShow="isShowModal" >
+        <post-form @createPost='onCreatePost' />
+    </my-modal>
+    <post-list :posts="posts" @deletePost="deletePost" />
 </template>
 <script>
 import PostForm from '@/components/PostForm.vue'
@@ -28,15 +33,17 @@ export default {
                     body: 'Post 3 Description'
                 },
             ],
+            isShowModal: false
         }
     },
     methods: {
         onCreatePost(newPost) {
             this.posts.push(newPost)
+            this.isShowModal = false
         },
         deletePost(postId) {
-        console.log('postId', postId);
-      }
+            this.posts = this.posts.filter(p => p.id !== postId)
+        },
     }
 }
 </script>
@@ -45,5 +52,8 @@ export default {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+.create-post {
+    margin: 20px 0;
 }
 </style>

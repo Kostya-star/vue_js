@@ -1,7 +1,7 @@
 <template>
     <form class="form">
-        <input v-model="post.title" type="text" name="title" placeholder="Title">
-        <input v-model="post.body" type="text" name="description" placeholder="Description">
+        <my-input v-model="post.title" type="text" name="title" placeholder="Title"></my-input>
+        <my-input v-model="post.body" type="text" name="description" placeholder="Description"></my-input>
         <my-button @click="onCreatePost">Create</my-button>
     </form>
 </template>

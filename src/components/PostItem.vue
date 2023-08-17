@@ -4,7 +4,7 @@
             <h3>{{ post.title }}</h3>
             <p>{{ post.body }}</p>
         </div>
-        <my-button @click="() => onDeletePost(post.id)">Delete</my-button>
+        <my-button @click="this.$emit('deletePost', post.id)">Delete</my-button>
     </div>
 </template>
 
@@ -16,11 +16,6 @@ export default {
             required: true
         }
     },
-    methods: {
-        onDeletePost(postId) {
-            this.$emit('deletePost', postId)
-        }
-    }
 };
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <div class="posts">
-    <post-item v-for="post of posts" :post="post" :key="post.id" />
+    <post-item v-for="post of posts" :post="post" :key="post.id"  />
   </div>
 </template>
 
@@ -14,7 +14,7 @@ export default {
     posts: {
       type: Array,
       required: true
-    }
+    },
   }
 };
 </script>

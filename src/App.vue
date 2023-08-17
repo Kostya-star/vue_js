@@ -1,6 +1,6 @@
 <template>
     <post-form @createPost='onCreatePost'/>
-    <post-list :posts="posts"/>
+    <post-list :posts="posts" @deletePost="deletePost"/>
 </template>
 <script>
 import PostForm from '@/components/PostForm.vue'
@@ -33,7 +33,10 @@ export default {
     methods: {
         onCreatePost(newPost) {
             this.posts.push(newPost)
-        }
+        },
+        deletePost(postId) {
+        console.log('postId', postId);
+      }
     }
 }
 </script>
